@@ -3,6 +3,7 @@ import questions from "../data/questions";
 
 function QuizPage({ quizType }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedOptionId, setSelectedOptionId] = useState(null);
 
   const quizQuestions = questions[quizType];
 
@@ -34,8 +35,15 @@ function QuizPage({ quizType }) {
           {currentQuestion.options.map((option) => (
             <button
               key={option.id}
+              onClick={() => {
+                setSelectedOptionId(option.id);
+              }}
               type="button"
-              className="rounded-xl border border-zinc-700 bg-zinc-900 p-4 text-right transition hover:border-purple-500 hover:bg-zinc-800"
+              className={`rounded-xl border bg-zinc-900 p-4 text-right transition hover:border-purple-500 hover:bg-zinc-800 ${
+                selectedOptionId === option.id
+                  ? "border-purple-600"
+                  : "border-zinc-700"
+              }`}
             >
               {option.text}
             </button>
@@ -45,7 +53,10 @@ function QuizPage({ quizType }) {
         <div className="mt-8 flex justify-between gap-4">
           <button
             type="button"
-            onClick={() => setCurrentIndex((prev) => prev + 1)}
+            onClick={() => {
+              setSelectedOptionId(null);
+              setCurrentIndex((prev) => prev + 1);
+            }}
             disabled={isLastQuestion}
             className="rounded-xl bg-purple-600 px-6 py-3 transition hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-40"
           >
@@ -53,7 +64,10 @@ function QuizPage({ quizType }) {
           </button>
           <button
             type="button"
-            onClick={() => setCurrentIndex((prev) => prev - 1)}
+            onClick={() => {
+              setSelectedOptionId(null);
+              setCurrentIndex((prev) => prev - 1);
+            }}
             disabled={isFirstQuestion}
             className="rounded-xl bg-zinc-800 px-6 py-3 transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-40"
           >
